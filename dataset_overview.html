@@ -1,0 +1,338 @@
+<title>TopAneu Batch 1 — Dataset Overview</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --surface-page:   #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --grid:           #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-cta:      #1baf7a; /* aqua, slot 5 */
+    --series-mra:      #2a78d6; /* blue, slot 1 */
+    --series-saccular: #2a78d6;
+    --series-fusiform: #eda100;
+    --series-dissecting:#e34948;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --surface-page:   #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --grid:           #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --series-cta:      #199e70;
+      --series-mra:      #3987e5;
+      --series-saccular: #3987e5;
+      --series-fusiform: #c98500;
+      --series-dissecting:#e66767;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --surface-1:      #1a1a19;
+    --surface-page:   #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --grid:           #2c2c2a;
+    --baseline:       #383835;
+    --border:         rgba(255,255,255,0.10);
+    --series-cta:      #199e70;
+    --series-mra:      #3987e5;
+    --series-saccular: #3987e5;
+    --series-fusiform: #c98500;
+    --series-dissecting:#e66767;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--surface-page);
+    color: var(--text-primary);
+  }
+  .viz-root { padding: 32px 20px 64px; max-width: 1180px; margin: 0 auto; }
+
+  h1 { font-size: 24px; font-weight: 700; margin: 0 0 4px; }
+  .subtitle { color: var(--text-secondary); font-size: 14px; margin: 0 0 28px; }
+  h2 { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+  .section-note { color: var(--text-secondary); font-size: 12.5px; margin: 0 0 14px; max-width: 820px; }
+  section { margin-bottom: 40px; }
+
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+
+  /* stat tiles */
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  .tile {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .tile .val { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.2; }
+  .tile .lbl { font-size: 11.5px; color: var(--text-secondary); margin-top: 2px; }
+  .tile .sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* legend */
+  .legend { display: flex; gap: 16px; font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; flex-wrap: wrap; }
+  .legend .item { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+  /* bars */
+  .barchart .row { display: grid; grid-template-columns: 220px 1fr 34px; align-items: center; gap: 8px; margin: 3px 0; }
+  .barchart .row .name { font-size: 11.5px; color: var(--text-secondary); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .barchart .row .track { position: relative; height: 14px; background: transparent; }
+  .barchart .row .track .seg { position: absolute; top: 0; height: 14px; border-radius: 3px; }
+  .barchart .row .total { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+  .grouped-bars { display: flex; align-items: flex-end; gap: 18px; height: 200px; padding: 0 6px; border-bottom: 1px solid var(--baseline); }
+  .grouped-bars .grp { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; flex: 1; min-width: 0; }
+  .grouped-bars .grp .pair { display: flex; align-items: flex-end; gap: 3px; height: 100%; width: 100%; justify-content: center; }
+  .grouped-bars .bar { width: 22px; border-radius: 4px 4px 0 0; position: relative; }
+  .grouped-bars .bar .n { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .grouped-bars .grp .glabel { margin-top: 8px; font-size: 11px; color: var(--text-secondary); text-align: center; }
+
+  table.datatable { border-collapse: collapse; width: 100%; font-size: 12px; }
+  table.datatable th, table.datatable td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--grid); }
+  table.datatable th { color: var(--text-muted); font-weight: 600; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.03em; }
+  table.datatable td.num, table.datatable th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .two-col { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; }
+  @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
+
+  details.taxonomy summary { cursor: pointer; font-size: 12px; color: var(--text-secondary); margin-top: 10px; }
+  details.taxonomy { margin-top: 4px; }
+
+  footer { color: var(--text-muted); font-size: 11px; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 14px; }
+</style>
+
+<div class="viz-root">
+  <h1>TopAneu Batch 1 — Dataset Overview</h1>
+  <p class="subtitle">Released training data, MICCAI 2026 TopAneu challenge · path: <code>/home/woody/iwi5/shared/topaneu_deployment/</code></p>
+
+  <div class="tiles">
+    <div class="tile"><div class="val">98</div><div class="lbl">Total cases</div><div class="sub">0 aneurysm-negative</div></div>
+    <div class="tile"><div class="val">125</div><div class="lbl">Aneurysm instances</div><div class="sub">1.28 per case, mean</div></div>
+    <div class="tile"><div class="val">58 / 40</div><div class="lbl">CTA / MRA cases</div><div class="sub">59% / 41%</div></div>
+    <div class="tile"><div class="val">2</div><div class="lbl">Centers</div><div class="sub">center-4 (Japan) · center-2 (Geneva)</div></div>
+    <div class="tile"><div class="val">50</div><div class="lbl">Location classes</div><div class="sub">29/50 have ≥1 positive case</div></div>
+    <div class="tile"><div class="val">36</div><div class="lbl">Vessel-segment classes</div><div class="sub">silver-standard, training-only</div></div>
+    <div class="tile"><div class="val">3</div><div class="lbl">Aneurysm-type classes</div><div class="sub">saccular / fusiform / dissecting</div></div>
+  </div>
+
+  <section>
+    <h2>Available labels per case</h2>
+    <p class="section-note">Every one of the 98 cases ships full paired supervision — no label derivation needed. Each case has an image plus four label artifacts, all voxel-aligned:</p>
+    <div class="card">
+      <table class="datatable">
+        <thead><tr><th>Artifact</th><th>Classes</th><th>Role</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>location_masks/*.nii.gz</td><td class="num">50 + bg</td><td>Task 2 ground truth</td><td>Multi-class voxel mask, per-aneurysm vessel-location label</td></tr>
+          <tr><td>location_jsons/*.json</td><td class="num">50</td><td>Task 1 ground truth</td><td>Multi-label list of location-class ids present in the case</td></tr>
+          <tr><td>vessel_masks/*.nii.gz</td><td class="num">36 + bg</td><td>Auxiliary / training signal</td><td>Organizer/TopBrain-model-predicted vessel-segment tree; not confirmed as a test-time input</td></tr>
+          <tr><td>type_masks/*.nii.gz</td><td class="num">3 + bg</td><td>Auxiliary</td><td>saccular / fusiform / dissecting — not in the graded metrics</td></tr>
+        </tbody>
+      </table>
+      <details class="taxonomy">
+        <summary>Why 50 location classes but only 29 observed positive in batch 1</summary>
+        <p class="section-note" style="margin-top:8px;">21/50 location classes have zero positive cases in this 98-case release — a long-tail imbalance, not a labeling gap (the full 50-class taxonomy is defined challenge-wide; batch 1 is simply too small to cover every rare site). See the full per-class table below.</p>
+      </details>
+    </div>
+  </section>
+
+  <section>
+    <h2>Distribution over modality</h2>
+    <p class="section-note">Batch 1 splits cleanly by center: every CTA case is center-4 (Mie Chuo, Japan), every MRA case is center-2 (Geneva HUG) — no modality/center mixing in this release.</p>
+    <div class="two-col">
+      <div class="card">
+        <div class="legend">
+          <span class="item"><span class="swatch" style="background:var(--series-cta)"></span>CTA (center-4)</span>
+          <span class="item"><span class="swatch" style="background:var(--series-mra)"></span>MRA (center-2)</span>
+        </div>
+        <div class="grouped-bars" id="chart-nAneurysms"></div>
+        <p class="section-note" style="margin:10px 0 0;">Aneurysms per case, by modality</p>
+      </div>
+      <div class="card">
+        <table class="datatable">
+          <thead><tr><th>Modality</th><th class="num">Cases</th><th class="num">Aneurysms</th><th class="num">Mean/case</th><th class="num">Max/case</th></tr></thead>
+          <tbody>
+            <tr><td><span class="swatch" style="background:var(--series-cta)"></span> CTA</td><td class="num">58</td><td class="num">72</td><td class="num">1.24</td><td class="num">4</td></tr>
+            <tr><td><span class="swatch" style="background:var(--series-mra)"></span> MRA</td><td class="num">40</td><td class="num">53</td><td class="num">1.33</td><td class="num">4</td></tr>
+            <tr><td><strong>Total</strong></td><td class="num"><strong>98</strong></td><td class="num"><strong>125</strong></td><td class="num">1.28</td><td class="num">4</td></tr>
+          </tbody>
+        </table>
+        <p class="section-note" style="margin-top:12px;">Aneurysm size (mm³) by modality</p>
+        <table class="datatable">
+          <thead><tr><th>Modality</th><th class="num">Min</th><th class="num">Median</th><th class="num">Mean</th><th class="num">Max</th></tr></thead>
+          <tbody>
+            <tr><td>CTA</td><td class="num">6.7</td><td class="num">70.3</td><td class="num">278.6</td><td class="num">3456.9</td></tr>
+            <tr><td>MRA</td><td class="num">1.4</td><td class="num">24.9</td><td class="num">115.3</td><td class="num">2074.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Distribution over location (50-class taxonomy)</h2>
+    <p class="section-note">Per-class positive-case counts (an aneurysm instance labeled with that location), split by modality, sorted descending. 21/50 classes have zero positive instances in batch 1 — collapsed under the toggle below the chart.</p>
+    <div class="card">
+      <div class="legend">
+        <span class="item"><span class="swatch" style="background:var(--series-cta)"></span>CTA</span>
+        <span class="item"><span class="swatch" style="background:var(--series-mra)"></span>MRA</span>
+      </div>
+      <div class="barchart" id="chart-locations"></div>
+      <details class="taxonomy" id="zero-locations-details">
+        <summary>21 location classes with zero positive instances in batch 1</summary>
+        <div id="zero-locations-list" class="section-note" style="margin-top:8px;"></div>
+      </details>
+    </div>
+  </section>
+
+  <div class="two-col">
+    <section>
+      <h2>Distribution over anatomical trunk</h2>
+      <p class="section-note">The 50 locations roll up into 5 major vessel trunks.</p>
+      <div class="card">
+        <div class="legend">
+          <span class="item"><span class="swatch" style="background:var(--series-cta)"></span>CTA</span>
+          <span class="item"><span class="swatch" style="background:var(--series-mra)"></span>MRA</span>
+        </div>
+        <div class="grouped-bars" id="chart-vesselgroup"></div>
+      </div>
+    </section>
+    <section>
+      <h2>Aneurysm type (auxiliary)</h2>
+      <p class="section-note">Not in the graded metrics; derived from type_masks by majority vote per aneurysm.</p>
+      <div class="card">
+        <div class="legend">
+          <span class="item"><span class="swatch" style="background:var(--series-cta)"></span>CTA</span>
+          <span class="item"><span class="swatch" style="background:var(--series-mra)"></span>MRA</span>
+        </div>
+        <div class="grouped-bars" id="chart-type"></div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    Source: <code>scripts/local/analyze_topaneu_distributions.py</code>, run 2026-07-13 against <code>/home/woody/iwi5/shared/topaneu_deployment/</code> (98 cases). Underlying tables: <code>docs/runs/topaneu_batch1_inspection/{case_level_summary,aneurysm_instance_table,location_distribution_by_modality,vessel_group_distribution_by_modality,type_distribution_by_modality}.csv</code>.
+  </footer>
+</div>
+
+<script>
+const CTA = getComputedStyle(document.documentElement); // placeholder, colors read via CSS vars below through inline style refs
+
+const locationData = [
+["4.1 Acom complex",18,13,5],
+["R-5.2 M1-M2 junction",17,8,9],
+["L-5.2 M1-M2 junction",14,9,5],
+["L-3.4 ICA C7-Pcom-junction",9,6,3],
+["R-3.1 ICA infraclinoid C1-C5",7,0,7],
+["R-5.1 M1 trunk",7,3,4],
+["R-3.4 ICA C7-Pcom-junction",7,6,1],
+["R-3.3 ICA C6-nonOA",4,0,4],
+["R-3.6 ICA C7-nonBranch",4,4,0],
+["L-3.2 ICA C6-OA-junction",4,0,4],
+["L-3.1 ICA infraclinoid C1-C5",4,2,2],
+["L-5.1 M1 trunk",3,1,2],
+["L-3.5 ICA C7-AChA-junction",3,2,1],
+["L-3.6 ICA C7-nonBranch",3,3,0],
+["R-3.5 ICA C7-AChA-junction",3,2,1],
+["L-3.3 ICA C6-nonOA",2,2,0],
+["R-1.1 VA trunk",2,2,0],
+["1.10 BA tip",2,2,0],
+["R-3.7 ICA C7-terminus",2,0,2],
+["L-3.7 ICA C7-terminus",1,1,0],
+["L-2.1 P1P2",1,0,1],
+["R-3.2 ICA C6-OA-junction",1,0,1],
+["L-4.5 Distal ACA branches",1,1,0],
+["R-4.5 Distal ACA branches",1,1,0],
+["L-1.2 PICA trunk",1,1,0],
+["R-1.9 BA-SCA junction",1,1,0],
+["R-1.3 VA-PICA junction",1,1,0],
+["L-1.3 VA-PICA junction",1,0,1],
+["L-1.9 BA-SCA junction",1,1,0],
+];
+const zeroLocations = ["L-1.1 VA trunk","R-1.2 PICA trunk","1.4 BA trunk","R-1.6 AICA trunk","L-1.6 AICA trunk",
+"R-2.1 P1P2","L-1.7 BA-AICA junction","R-1.8 SCA trunk","L-1.8 SCA trunk","R-1.7 BA-AICA junction",
+"1.5 VA-BA junction","L-2.2 P3P4","R-2.2 P3P4","L-4.4 A3","R-4.4 A3","L-4.3 A2","R-4.3 A2",
+"L-4.2 A1","R-4.2 A1","R-5.3 Distal-M2M3","L-5.3 Distal-M2M3"];
+
+const vesselGroupData = [
+["1.x Vertebrobasilar",9,8,1],
+["2.x Posterior cerebral",1,0,1],
+["3.x Internal carotid",54,28,26],
+["4.x Anterior cerebral/Acomm",20,15,5],
+["5.x Middle cerebral",41,21,20],
+];
+
+const typeData = [
+["Saccular",114,65,49],
+["Fusiform",9,5,4],
+["Dissecting",2,2,0],
+];
+
+const nAneurysmsData = [ // [n, ctaCount, mraCount]
+[1,47,32],[2,9,5],[3,1,1],[4,1,2],
+];
+
+const ctaColor = 'var(--series-cta)';
+const mraColor = 'var(--series-mra)';
+
+function renderBarchart(el, data, maxOverride) {
+  const max = maxOverride || Math.max(...data.map(d => d[1]));
+  el.innerHTML = data.map(([name, total, cta, mra]) => {
+    const ctaW = (cta/max*100).toFixed(2);
+    const mraW = (mra/max*100).toFixed(2);
+    return `<div class="row">
+      <div class="name" title="${name}">${name}</div>
+      <div class="track">
+        <div class="seg" style="left:0; width:${ctaW}%; top:0; height:6px; background:${ctaColor};"></div>
+        <div class="seg" style="left:0; width:${mraW}%; top:8px; height:6px; background:${mraColor};"></div>
+      </div>
+      <div class="total">${total}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderGrouped(el, data, labelFn) {
+  const max = Math.max(...data.map(d => Math.max(d[2], d[3])));
+  el.innerHTML = data.map(([label, total, cta, mra]) => {
+    const ctaH = Math.max(2, (cta/max*100)).toFixed(1);
+    const mraH = Math.max(2, (mra/max*100)).toFixed(1);
+    return `<div class="grp">
+      <div class="pair">
+        <div class="bar" style="height:${ctaH}%; background:${ctaColor};"><span class="n">${cta}</span></div>
+        <div class="bar" style="height:${mraH}%; background:${mraColor};"><span class="n">${mra}</span></div>
+      </div>
+      <div class="glabel">${labelFn(label)}</div>
+    </div>`;
+  }).join('');
+}
+
+renderBarchart(document.getElementById('chart-locations'), locationData);
+renderGrouped(document.getElementById('chart-vesselgroup'), vesselGroupData, l => l);
+renderGrouped(document.getElementById('chart-type'), typeData, l => l);
+renderGrouped(document.getElementById('chart-nAneurysms'),
+  nAneurysmsData.map(([n,c,m]) => [`${n}`, Math.max(c,m), c, m]),
+  l => `${l} aneurysm${l==='1'?'':'s'}`);
+
+document.getElementById('zero-locations-list').innerHTML = zeroLocations.join(' · ');
+</script>
